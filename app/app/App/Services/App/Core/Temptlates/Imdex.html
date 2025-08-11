@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Ms. Zin — Morning Briefing</title>
+  <link rel="stylesheet" href="/static/css/style.css"/>
+  <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="hdr">
+      <div class="logo">Ms. Zin <span class="badge">Calm Intelligence</span></div>
+      <div style="text-align:right">
+        <div class="kitt" title="Aware Mode"></div>
+        <span class="small">Aware Mode</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Good morning, {{ user_name }}.</h2>
+      <p class="small">Your high-leverage opportunities today:</p>
+      <div id="briefing" hx-get="/briefing" hx-trigger="load" hx-swap="innerHTML">
+        <p class="small">Loading briefing…</p>
+      </div>
+      <div style="margin-top:12px;">
+        <button class="btn" hx-get="/briefing" hx-target="#briefing">Refresh Briefing</button>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h3>Settings</h3>
+        <form hx-post="/settings" hx-target="#settings-status" hx-swap="innerHTML">
+          <label>Name</label>
+          <input name="user_name" value="{{ user_name }}"/>
+          <label style="margin-top:8px;display:block;">Tone</label>
+          <select name="tone">
+            <option {% if tone=='professional' %}selected{% endif %} value="professional">Professional</option>
+            <option {% if tone=='warm' %}selected{% endif %} value="warm">Warm</option>
+            <option {% if tone=='direct' %}selected{% endif %} value="direct">Direct</option>
+          </select>
+          <div style="margin-top:10px;"><button class="btn" type="submit">Save</button></div>
+        </form>
+        <div id="settings-status" class="small"></div>
+      </div>
+
+      <div class="card">
+        <h3>Relationship Reminder</h3>
+        <form hx-post="/touchpoint" hx-target="#touchpoint-status" hx-swap="innerHTML">
+          <label>Contact</label>
+          <input name="contact" placeholder="e.g., Dana (Investor)"/>
+          <label style="margin-top:8px;display:block;">Note</label>
+          <input name="note" placeholder="Follow up on deck"/>
+          <div style="margin-top:10px;"><button class="btn" type="submit">Add</button></div>
+        </form>
+        <div id="touchpoint-status" class="small"></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
